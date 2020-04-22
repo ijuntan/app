@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Dimensions, Easing } from 'react-native'
-import { Card, Container, Content, Button, Icon, Form, Input } from 'native-base'
+import { Card, Header, Container, Content, Button, Icon, Form, Input } from 'native-base'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 class Pomodoro extends Component {
     constructor(props){
@@ -11,7 +11,8 @@ class Pomodoro extends Component {
             time:'25:00',
             breakTime:5,
             fill:0,
-            cycle:'focus',
+            cycle:'Focus',
+            cycleSession:true,
             timerId: null,
             timerRunning:false,
             seconds:0,
@@ -20,7 +21,24 @@ class Pomodoro extends Component {
     }
 
     countdownTimer = () => {
-        this.state.minutes=this.state.focusTime
+        if (this.state.cycleSession==true)
+        {
+            this.state.cycle='Focus'
+        }
+        else
+        {
+            this.state.cycle='Break'
+        }
+
+        if (this.state.cycle=='Focus')
+        {
+            this.state.minutes=this.state.focusTime
+        }
+        else
+        {
+            this.state.minutes=this.state.breakTime
+        }
+
         let second = this.state.minutes*60
 
         if (this.state.timerId != null)
@@ -33,7 +51,7 @@ class Pomodoro extends Component {
             this.setState({
                 timerId: null, 
                 timerRunning:false,
-                time: time
+                time: time,
             });
         }
         else
@@ -43,7 +61,7 @@ class Pomodoro extends Component {
                    if (this.state.timerId != null)
                    {
                        clearInterval(timerId);
-                       this.setState({timerId: null});
+                       this.setState({timerId: null,cycleSession: !this.state.cycleSession,});
                    }
    
                   return false;
@@ -62,7 +80,6 @@ class Pomodoro extends Component {
                         timerId: null, 
                         timerRunning:true,
                         time: time,
-                        
                     });
                 }
                 this.setState({
@@ -146,9 +163,14 @@ class Pomodoro extends Component {
                                 >
                                 {
                                     fill => (
-                                    <Text style={{fontSize:50}}>
-                                        {this.state.time}
-                                    </Text>
+                                    <View>
+                                        <Text style={{fontSize:20,paddingLeft:45,paddingBottom:20}}>
+                                            {this.state.cycle}
+                                        </Text>
+                                        <Text style={{fontSize:50,paddingBottom:30}}>
+                                            {this.state.time}
+                                        </Text>
+                                    </View>
                                     )
                                 }
                                 </AnimatedCircularProgress>
@@ -168,7 +190,14 @@ class Pomodoro extends Component {
                                             Stop
                                         </Text>
                                         </Button>
-                                }   
+                                        
+                                } 
+                                <View style={{paddingLeft:10}}></View>  
+                                <Button onPress={this.countdownTimer}> 
+                                        <Text style={{fontSize:20,padding:10,color:'white'}}>
+                                            Reset
+                                        </Text>
+                                </Button>
                             </View>
 
                             <View style={{flex:1,flexDirection:'row',paddingLeft:10,alignItems:'center',justifyContent:'center'}}>

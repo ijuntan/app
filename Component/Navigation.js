@@ -50,7 +50,7 @@ const DrawerStack = createDrawerNavigator ({
   Dashboard: { screen : Tab },
   Classes:{ screen : ClassDrawer },
   Tasks:{ screen: TasksDrawer },
-  Pomodoro: { screen: Pomodoro},
+  Pomodoro: { screen: Pomodoro }, 
   Setting: { screen: Setting }     
   }
 ,
